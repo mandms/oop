@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e48c9c9e-977a-4c4f-85ab-01a34cbfcc7a}</ProjectGuid>
-    <RootNamespace>lab1</RootNamespace>
+    <ProjectGuid>{b976eab5-99da-407f-a32a-aeb9c369d064}</ProjectGuid>
+    <RootNamespace>SameWeekDay</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>join</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -144,20 +143,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="join.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="lab1.h" />
+    <ClCompile Include="SameWeekDay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Empty.txt" />
     <Text Include="input1.txt" />
     <Text Include="input2.txt" />
     <Text Include="input3.txt" />
-    <Text Include="output.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

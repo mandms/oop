@@ -15,25 +15,38 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="join.cpp">
+    <ClCompile Include="Join.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lab1.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Tests.bat">
-      <Filter>Исходные файлы</Filter>
+    <None Include="input1.bin">
+      <Filter>Файлы ресурсов</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Empty.txt" />
-    <Text Include="input1.txt" />
-    <Text Include="input2.txt" />
-    <Text Include="output.txt" />
-    <Text Include="input3.txt" />
+    <None Include="input2.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="input3.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="tests\Empty.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="tests\EmptyResult.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="tests\NonEmpty.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="tests\NonEmpty2.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="tests\NonEmptyResult.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="Tests.bat" />
+    <None Include="tests\Empty2.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
 </Project>

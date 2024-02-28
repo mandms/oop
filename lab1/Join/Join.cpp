@@ -2,22 +2,20 @@
 #include <fstream>
 #include <optional>
 #include <string>
-#include "lab1.h"
 #include <vector>
 
 const std::string INVALID_ARGUMENTS_COUNT_ERROR = "Invalid arguments count\n"
-    "Usage: join.exe <input file1> ... <input file N> <output file>\n";
+"Usage: join.exe <input file1> ... <input file N> <output file>\n";
 const int MIN_ARGS_COUNT = 3;
 const std::string OPEN_FILE_WRITING_ERROR = "Failed to open file for writing: ";
 const std::string OPEN_FILE_READING_ERROR = "Failed to open file for reading: ";
 const std::string INPUT_FILE_ERROR = "Reading input file error:";
 const std::string WRITING_OUTPUT_ERROR = "Writing output file error\n";
 
-
 struct Args
 {
     std::vector<std::string> inputFileNames;
-    std::string outnputFileName;
+    std::string outputFileName;
 };
 
 std::optional<Args> ParseArgs(int argc, char* argv[])
@@ -32,7 +30,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
     {
         args.inputFileNames.push_back(argv[i]);
     }
-    args.outnputFileName = argv[argc - 1];
+    args.outputFileName = argv[argc - 1];
 
     return args;
 }
@@ -40,9 +38,9 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 void JoinStreams(std::ifstream& input, std::ofstream& output)
 {
     char ch;
-    while (input.get(ch))
+    while (input.read((char*)&ch, sizeof(char)))
     {
-        if (!output.put(ch))
+        if (!output.write((char*)&ch, sizeof(char)))
         {
             break;
         }
@@ -53,16 +51,17 @@ int main(int argc, char* argv[])
 {
     auto args = ParseArgs(argc, argv);
 
-    if (!args) 
+    if (!args)
     {
         return 1;
     }
 
     std::ofstream output;
-    output.open(args->outnputFileName); //TODO std::ios::binary;
+    output.open(args->outputFileName, std::ios_base::binary);
+
 
     if (!output.is_open()) {
-        std::cout << OPEN_FILE_WRITING_ERROR << args->outnputFileName << std::endl;
+        std::cout << OPEN_FILE_WRITING_ERROR << args->outputFileName << std::endl;
         return 1;
     }
 
@@ -76,6 +75,7 @@ int main(int argc, char* argv[])
             std::cout << OPEN_FILE_READING_ERROR << inputFileName << std::endl;
             return 1;
         }
+
         JoinStreams(input, output);
 
         if (input.bad())
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-    
+
     //закрывать файлы не надо, т.к. при выходе из блока где была объявлена переменная, вызывается деструктор, который заботится об этом
 
     if (!output.flush())
