@@ -42,6 +42,7 @@ void JoinStreams(std::ifstream& input, std::ofstream& output)
     {
         if (!output.write((char*)&ch, sizeof(char)))
         {
+            std::cout << WRITING_OUTPUT_ERROR << std::endl;
             break;
         }
     }
@@ -83,6 +84,8 @@ int main(int argc, char* argv[])
             std::cout << INPUT_FILE_ERROR << inputFileName << std::endl;
             return 1;
         }
+
+        input.close();
     }
 
     //закрывать файлы не надо, т.к. при выходе из блока где была объявлена переменная, вызывается деструктор, который заботится об этом

@@ -14,6 +14,13 @@ const int MIN_MONTH_VALUE = 1;
 const int MAX_MONTH_VALUE = 12;
 const int MIN_DAY_VALUE = 1;
 const int MAX_DAY_VALUE = 31;
+const int LEAP_YEAR_DIVIDEND_FIRST = 4;
+const int LEAP_YEAR_DIVIDEND_SECOND = 100;
+const int LEAP_YEAR_DIVIDEND_THIRD = 400;
+const int MONTH_COEF = 13;
+const int WEEK_DAYS = 7;
+const int WEEK_COEF = 5;
+const int THIRD_MONTH = 3;
 
 struct Date
 {
@@ -24,8 +31,8 @@ struct Date
 
 struct Args
 {
-	Date date1;
-	Date date2;
+	Date dateFirst;
+	Date dateSecond;
 };
 
 Args ParseDates()
@@ -38,14 +45,16 @@ Args ParseDates()
 	Date date2;
 	std::cin >> date2.year >> date2.month >> date2.day;
 
-	args.date1 = date1;
-	args.date2 = date2;
+	args.dateFirst = date1;
+	args.dateSecond = date2;
 	return args;
 }
 
 bool IsLeap(int year)
 {
-	return (year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0));
+	return (year % LEAP_YEAR_DIVIDEND_THIRD == 0) || 
+		((year % 4 == LEAP_YEAR_DIVIDEND_FIRST) && 
+			(year % LEAP_YEAR_DIVIDEND_SECOND != 0));
 }
 
 int Zeller(Date date)
@@ -54,52 +63,54 @@ int Zeller(Date date)
 	int month = date.month;
 	int year = date.year;
 
-	if (month < 3) {
-		month += 12;
+	if (month < THIRD_MONTH) {
+		month += MAX_MONTH_VALUE;
 		year--;
 	}
 
-	return (day + (13 * (month + 1)) / 5 + year + year / 4 - year / 100 + year / 400) % 7;
+	return (day + (MONTH_COEF * (month + 1)) / 
+		WEEK_COEF + year + year / LEAP_YEAR_DIVIDEND_FIRST - year / 
+		LEAP_YEAR_DIVIDEND_SECOND + year / LEAP_YEAR_DIVIDEND_THIRD) % WEEK_DAYS;
 }
 
-bool IsValidDate(Args args)
+bool IsValidDate(Date date)
 {
-	if ((args.date1.month == 2) && args.date1.day > 29)
+	if ((date.month == 2) && date.day > 29)
 	{
 		std::cout << ERROR_DAY_VALUE_OUT_OF_RANGE << std::endl;
 		return false;
 	}
 
-	if (((MIN_YEAR_VALUE > args.date1.year) || (args.date1.year > MAX_YEAR_VALUE)) ||
-		((MIN_YEAR_VALUE > args.date2.year) || (args.date2.year > MAX_YEAR_VALUE)))
+	if ((MIN_YEAR_VALUE > date.year) || (date.year > MAX_YEAR_VALUE))
 	{
 		std::cout << ERROR_YEAR_VALUE_OUT_OF_RANGE << std::endl;
 		return false;
 	}
 
-	if (((MIN_MONTH_VALUE > args.date1.month) || (args.date1.month > MAX_MONTH_VALUE)) ||
-		((MIN_MONTH_VALUE > args.date2.month) || (args.date2.month > MAX_MONTH_VALUE)))
+	if ((MIN_MONTH_VALUE > date.month) || (date.month > MAX_MONTH_VALUE))
 	{
 		std::cout << ERROR_MONTH_VALUE_OUT_OF_RANGE << std::endl;
 		return false;
 	}
 
-	if ((!IsLeap(args.date1.year) && args.date1.month == 2 && args.date1.day > 28) ||
-		(!IsLeap(args.date2.year) && args.date2.month == 2 && args.date2.day > 28)
-		)
+	if (!IsLeap(date.year) && date.month == 2 && date.day > 28)
 	{
 		std::cout << ERROR_DAY_VALUE_OUT_OF_RANGE << std::endl;
 		return false;
 	}
 
-	if (((MIN_DAY_VALUE > args.date1.day) || (args.date1.day > MAX_DAY_VALUE)) ||
-		((MIN_DAY_VALUE > args.date2.day) || (args.date2.day > MAX_DAY_VALUE)))
+	if ((MIN_DAY_VALUE > date.day) || (date.day > MAX_DAY_VALUE))
 	{
 		std::cout << ERROR_DAY_VALUE_OUT_OF_RANGE << std::endl;
 		return false;
 	}
 
-	if (args.date1.year != args.date2.year)
+	return true;
+}
+
+bool IsDifferentYearValue(Args args)
+{
+	if (args.dateFirst.year != args.dateSecond.year)
 	{
 		std::cout << ERROR_MESSAGE << std::endl;
 		return false;
@@ -112,13 +123,15 @@ int main()
 {
 	auto args = ParseDates();
 
-	if (!IsValidDate(args))
+	if (!IsValidDate(args.dateFirst) || 
+		!IsValidDate(args.dateSecond) || 
+		!IsDifferentYearValue(args))
 	{
 		return 1;
 	}
 
-	int dayOfWeek1 = Zeller(args.date1);
-	int dayOfWeek2 = Zeller(args.date2);
+	int dayOfWeek1 = Zeller(args.dateFirst);
+	int dayOfWeek2 = Zeller(args.dateSecond);
 
 	if (dayOfWeek1 == dayOfWeek2)
 	{
